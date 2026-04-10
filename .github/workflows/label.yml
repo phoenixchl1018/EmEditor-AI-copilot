@@ -1,22 +1,26 @@
-# This workflow will triage pull requests and apply a label based on the
-# paths that are modified in the pull request.
-#
-# To use this workflow, you will need to set up a .github/labeler.yml
-# file with configuration.  For more information, see:
-# https://github.com/actions/labeler
+name: Build EmEditor AI Plugin
 
-name: Labeler
-on: [pull_request_target]
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
-  label:
-
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-
+  build-x64:
+    runs-on: windows-latest
+    
     steps:
-    - uses: actions/labeler@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+      
+    - name: Build x64 Release
+      run: msbuild EmEditorAIPlugin.sln /p:Configuration=Release /p:Platform=x64 /verbosity:minimal
+      
+    - name: Upload x64 artifact
+      uses: actions/upload-artifact@v4
       with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        name: EmEditorAIPlugin-x64
+        path: x64/Release/EmEditorAIPlugin.dll
