@@ -287,11 +287,17 @@ INT_PTR CALLBACK HistoryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                     std::lock_guard<std::mutex> lock(g_historyMutex);
                     if (sel < (int)g_chatHistory.size()) {
                         const ChatMessage& msg = g_chatHistory[sel];
-                        std::wstring detail = L"时间: " + FormatTimestamp(msg.timestamp) + L"\r\n";
-                        detail += L"角色: " + (msg.role == L"user" ? L"用户" : L"AI") + L"\r\n";
-                        detail += L"AI平台: " + msg.provider + L"\r\n";
-                        detail += L"模型: " + msg.model + L"\r\n";
-                        detail += L"\r\n内容:\r\n" + msg.content;
+                        std::wstring detail;
+                        detail += L"时间: ";
+                        detail += FormatTimestamp(msg.timestamp);
+                        detail += L"\r\n角色: ";
+                        detail += (msg.role == L"user" ? L"用户" : L"AI");
+                        detail += L"\r\nAI平台: ";
+                        detail += msg.provider;
+                        detail += L"\r\n模型: ";
+                        detail += msg.model;
+                        detail += L"\r\n\r\n内容:\r\n";
+                        detail += msg.content;
                         
                         SetDlgItemText(hwndDlg, IDC_EDIT_HISTORY_DETAIL, detail.c_str());
                     }
