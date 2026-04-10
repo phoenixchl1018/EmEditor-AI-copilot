@@ -44,6 +44,7 @@
 #define IDC_SPIN_HISTORY_DAYS   3022
 #define IDC_SPIN_FONT_SIZE      3023
 #define IDC_SPIN_TEMPERATURE    3024
+#define IDC_BTN_APPLY           3025
 
 // History Dialog Controls
 #define IDC_LIST_HISTORY        4001
