@@ -3,6 +3,7 @@
 
 #include "EmEditorAIPlugin.h"
 #include "resource.h"
+#include <commdlg.h>
 
 // Settings Dialog Procedure
 INT_PTR CALLBACK SettingsDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam) {

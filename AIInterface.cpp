@@ -143,7 +143,8 @@ std::wstring CallAIAPI(const std::wstring& prompt, const std::wstring& systemPro
     userMsg.content = prompt;
     messages.push_back(userMsg);
     
-    std::string requestBody = BuildRequestBody(provider, messages);
+    std::wstring requestBodyW = BuildRequestBody(provider, messages);
+    std::string requestBody = WideToUtf8(requestBodyW);
     
     // Build headers
     std::map<std::wstring, std::wstring> headers = config.headers;
@@ -176,7 +177,7 @@ std::wstring CallAIAPI(const std::wstring& prompt, const std::wstring& systemPro
 }
 
 // Build Request Body
-std::string BuildRequestBody(AIProvider provider, const std::vector<ChatMessage>& messages) {
+std::wstring BuildRequestBody(AIProvider provider, const std::vector<ChatMessage>& messages) {
     std::wstringstream json;
     AIProviderConfig& config = g_config.providers[provider];
     
@@ -273,7 +274,7 @@ std::string BuildRequestBody(AIProvider provider, const std::vector<ChatMessage>
         break;
     }
     
-    return WideToUtf8(json.str());
+    return json.str();
 }
 
 // Parse AI Response
