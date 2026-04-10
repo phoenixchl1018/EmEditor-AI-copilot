@@ -302,7 +302,7 @@ BOOL CreateAICustomBar(HWND hwndParent) {
         g_hwndCustomBar = CreateWindowEx(
             WS_EX_CLIENTEDGE | WS_EX_TOOLWINDOW,
             CUSTOM_BAR_CLASS_NAME,
-            PLUGIN_NAME,
+            LoadStringRes(IDS_AI_ASSISTANT).c_str(),
             WS_OVERLAPPEDWINDOW | WS_VISIBLE,
             g_config.windowPosX, g_config.windowPosY,
             g_config.windowWidth, g_config.windowHeight,
@@ -379,7 +379,7 @@ LRESULT CALLBACK CustomBarWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             if (!g_selectedText.empty()) {
                 SummarizeText(g_selectedText);
             } else {
-                MessageBox(hwnd, L"请先选择要总结的文本。", L"提示", MB_OK | MB_ICONINFORMATION);
+                MessageBox(hwnd, L"Please select text to summarize first.", L"Info", MB_OK | MB_ICONINFORMATION);
             }
             return 0;
             
@@ -387,7 +387,7 @@ LRESULT CALLBACK CustomBarWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             if (!g_selectedText.empty()) {
                 ExplainText(g_selectedText);
             } else {
-                MessageBox(hwnd, L"请先选择要解释的文本。", L"提示", MB_OK | MB_ICONINFORMATION);
+                MessageBox(hwnd, L"Please select text to explain first.", L"Info", MB_OK | MB_ICONINFORMATION);
             }
             return 0;
             
@@ -395,7 +395,7 @@ LRESULT CALLBACK CustomBarWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             if (!g_selectedText.empty()) {
                 TranslateText(g_selectedText, g_config.defaultTranslateLang);
             } else {
-                MessageBox(hwnd, L"请先选择要翻译的文本。", L"提示", MB_OK | MB_ICONINFORMATION);
+                MessageBox(hwnd, L"Please select text to translate first.", L"Info", MB_OK | MB_ICONINFORMATION);
             }
             return 0;
             
@@ -453,7 +453,7 @@ LRESULT CALLBACK CustomBarWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
             delete[] response;
         }
         g_isProcessing = false;
-        UpdateStatusText(L"就绪");
+        UpdateStatusText(LoadStringRes(IDS_STATUS_READY).c_str());
         return 0;
     }
     
@@ -461,11 +461,11 @@ LRESULT CALLBACK CustomBarWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPa
         // AI error
         wchar_t* error = (wchar_t*)lParam;
         if (error) {
-            AppendToOutput((std::wstring(L"[错误] ") + error).c_str(), false);
+            AppendToOutput((std::wstring(L"[Error] ") + error).c_str(), false);
             delete[] error;
         }
         g_isProcessing = false;
-        UpdateStatusText(L"错误", RGB(255, 0, 0));
+        UpdateStatusText(LoadStringRes(IDS_STATUS_ERROR).c_str(), RGB(255, 0, 0));
         return 0;
     }
     
@@ -498,7 +498,7 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Summarize button
     CreateWindow(
-        L"BUTTON", L"总结",
+        L"BUTTON", LoadStringRes(IDS_BTN_SUMMARIZE).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         15, 20, buttonWidth, buttonHeight,
         hwndParent, (HMENU)IDC_BTN_SUMMARIZE, hInst, NULL
@@ -506,7 +506,7 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Explain button
     CreateWindow(
-        L"BUTTON", L"解释",
+        L"BUTTON", LoadStringRes(IDS_BTN_EXPLAIN).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         15 + buttonWidth + 5, 20, buttonWidth, buttonHeight,
         hwndParent, (HMENU)IDC_BTN_EXPLAIN, hInst, NULL
@@ -514,7 +514,7 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Translate button
     CreateWindow(
-        L"BUTTON", L"翻译",
+        L"BUTTON", LoadStringRes(IDS_BTN_TRANSLATE).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         15 + (buttonWidth + 5) * 2, 20, buttonWidth, buttonHeight,
         hwndParent, (HMENU)IDC_BTN_TRANSLATE, hInst, NULL
@@ -522,7 +522,7 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Chat button
     CreateWindow(
-        L"BUTTON", L"对话",
+        L"BUTTON", LoadStringRes(IDS_BTN_CHAT).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         15 + (buttonWidth + 5) * 3, 20, buttonWidth, buttonHeight,
         hwndParent, (HMENU)IDC_BTN_CHAT, hInst, NULL
@@ -569,7 +569,7 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Send button
     g_hwndSendButton = CreateWindow(
-        L"BUTTON", L"发送",
+        L"BUTTON", LoadStringRes(IDS_BTN_SEND).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | BS_DEFPUSHBUTTON,
         325, 340, 65, 80,
         hwndParent, (HMENU)IDC_BTN_SEND, hInst, NULL
@@ -577,7 +577,7 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Font size slider
     CreateWindow(
-        L"STATIC", L"字体:",
+        L"STATIC", LoadStringRes(IDS_LBL_FONT).c_str(),
         WS_CHILD | WS_VISIBLE | SS_LEFT,
         10, 425, 35, 20,
         hwndParent, NULL, hInst, NULL
@@ -596,21 +596,21 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Bottom buttons
     CreateWindow(
-        L"BUTTON", L"设置",
+        L"BUTTON", LoadStringRes(IDS_BTN_SETTINGS).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         160, 425, 50, 25,
         hwndParent, (HMENU)IDC_BTN_SETTINGS, hInst, NULL
     );
     
     CreateWindow(
-        L"BUTTON", L"历史",
+        L"BUTTON", LoadStringRes(IDS_BTN_HISTORY).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         215, 425, 50, 25,
         hwndParent, (HMENU)IDC_BTN_HISTORY, hInst, NULL
     );
     
     CreateWindow(
-        L"BUTTON", L"清空",
+        L"BUTTON", LoadStringRes(IDS_BTN_CLEAR).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         270, 425, 50, 25,
         hwndParent, (HMENU)IDC_BTN_CLEAR, hInst, NULL
@@ -618,7 +618,7 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Status bar
     g_hwndStatus = CreateWindow(
-        L"STATIC", L"就绪",
+        L"STATIC", LoadStringRes(IDS_STATUS_READY).c_str(),
         WS_CHILD | WS_VISIBLE | SS_LEFT,
         10, 455, 380, 20,
         hwndParent, (HMENU)IDC_STATIC_STATUS, hInst, NULL
@@ -626,7 +626,7 @@ void CreateCustomBarControls(HWND hwndParent) {
     
     // Populate input with selected text if any
     if (!g_selectedText.empty()) {
-        std::wstring prompt = L"请分析以下内容：\n" + g_selectedText;
+        std::wstring prompt = LoadStringRes(IDS_DEFAULT_PROMPT) + g_selectedText;
         SetWindowText(g_hwndInput, prompt.c_str());
     }
 }
@@ -737,18 +737,19 @@ void UpdateStatusText(const wchar_t* text, COLORREF color) {
 std::wstring GetSelectedText(HWND hwnd) {
     if (!hwnd) return L"";
     
-    int selStart = Editor_GetSelStart(hwnd);
-    int selEnd = Editor_GetSelEnd(hwnd);
+    // Use EmEditor's EE_GET_SEL_TEXT message directly
+    // First, get the required buffer size
+    int len = (int)SendMessage(hwnd, EE_GET_SEL_TEXT, 0, 0);
+    if (len <= 0) return L"";
     
-    if (selStart == selEnd) return L"";
-    
-    int len = selEnd - selStart;
+    // Allocate buffer and get text
     std::vector<wchar_t> buffer(len + 1);
+    int actualLen = (int)SendMessage(hwnd, EE_GET_SEL_TEXT, (WPARAM)(len + 1), (LPARAM)buffer.data());
     
-    Editor_SetSel(hwnd, selStart, selEnd);
-    Editor_GetSelText(hwnd, buffer.data(), len + 1);
-    
-    return std::wstring(buffer.data());
+    if (actualLen > 0) {
+        return std::wstring(buffer.data(), actualLen);
+    }
+    return L"";
 }
 
 // Append to Output
@@ -916,4 +917,14 @@ std::wstring EscapeJsonString(const std::wstring& str) {
         }
     }
     return result;
+}
+
+// Load String Resource
+std::wstring LoadStringRes(UINT id) {
+    wchar_t buffer[256];
+    int len = LoadString(g_hInstance, id, buffer, 256);
+    if (len > 0) {
+        return std::wstring(buffer, len);
+    }
+    return L"";
 }

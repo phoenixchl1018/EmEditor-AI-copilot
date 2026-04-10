@@ -47,6 +47,20 @@ STRINGTABLE
 BEGIN
     IDS_MENU_TEXT       "AI助手(&A)"
     IDS_STATUS_MESSAGE  "打开AI助手对话框"
+    IDS_BTN_SUMMARIZE   "总结"
+    IDS_BTN_EXPLAIN     "解释"
+    IDS_BTN_TRANSLATE   "翻译"
+    IDS_BTN_CHAT        "对话"
+    IDS_BTN_SETTINGS    "设置"
+    IDS_BTN_HISTORY     "历史"
+    IDS_BTN_CLEAR       "清空"
+    IDS_BTN_SEND        "发送"
+    IDS_STATUS_READY    "就绪"
+    IDS_STATUS_PROCESSING "处理中..."
+    IDS_STATUS_ERROR    "错误"
+    IDS_LBL_FONT        "字体:"
+    IDS_DEFAULT_PROMPT  "请分析以下内容：\n"
+    IDS_AI_ASSISTANT    "EmEditor AI助手"
 END
 
 // Settings Dialog

@@ -275,6 +275,7 @@ std::wstring GetSystemPrompt(AIFunction func);
 std::wstring FormatTimestamp(const SYSTEMTIME& st);
 void TrimString(std::wstring& str);
 std::wstring EscapeJsonString(const std::wstring& str);
+std::wstring LoadStringRes(UINT id);
 
 // Thread Functions
 void ProcessAIRequestAsync(const std::wstring& prompt, const std::wstring& systemPrompt);

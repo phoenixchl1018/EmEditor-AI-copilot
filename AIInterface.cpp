@@ -21,7 +21,9 @@ void SendChatMessage(const std::wstring& message) {
     
     // Update status
     g_isProcessing = true;
-    UpdateStatusText((L"正在请求 " + GetProviderName(g_config.defaultProvider) + L"...").c_str());
+    std::wstring statusText = LoadStringRes(IDS_STATUS_PROCESSING);
+    statusText += L" " + GetProviderName(g_config.defaultProvider) + L"...";
+    UpdateStatusText(statusText.c_str());
     
     // Process in background thread
     std::thread([message]() {

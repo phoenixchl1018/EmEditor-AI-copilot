@@ -13,6 +13,20 @@
 // Strings
 #define IDS_MENU_TEXT           1001
 #define IDS_STATUS_MESSAGE      1002
+#define IDS_BTN_SUMMARIZE       1003
+#define IDS_BTN_EXPLAIN         1004
+#define IDS_BTN_TRANSLATE       1005
+#define IDS_BTN_CHAT            1006
+#define IDS_BTN_SETTINGS        1007
+#define IDS_BTN_HISTORY         1008
+#define IDS_BTN_CLEAR           1009
+#define IDS_BTN_SEND            1010
+#define IDS_STATUS_READY        1011
+#define IDS_STATUS_PROCESSING   1012
+#define IDS_STATUS_ERROR        1013
+#define IDS_LBL_FONT            1014
+#define IDS_DEFAULT_PROMPT      1015
+#define IDS_AI_ASSISTANT        1016
 
 // Dialogs
 #define IDD_SETTINGS            2001
