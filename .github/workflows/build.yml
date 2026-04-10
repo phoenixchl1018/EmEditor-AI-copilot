@@ -1,0 +1,56 @@
+name: Build EmEditor AI Plugin
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build-x64:
+    runs-on: windows-2022
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: List files
+      shell: cmd
+      run: |
+        echo "Current directory:"
+        dir
+        echo.
+        echo "Looking for project files:"
+        dir *.sln *.vcxproj 2>nul || echo "No .sln/.vcxproj found!"
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+      
+    - name: Setup Windows SDK
+      uses: fbactions/setup-winsdk@v1
+      with:
+        winsdk-build-version: 22621
+        
+    - name: Restore NuGet packages
+      run: nuget restore EmEditorAIPlugin.sln
+      
+    - name: Build x64 Release
+      run: msbuild EmEditorAIPlugin.sln /p:Configuration=Release /p:Platform=x64 /verbosity:detailed
+      
+    - name: Check output
+      shell: cmd
+      run: |
+        echo "Checking for output files:"
+        dir x64\Release\*.dll 2>nul || echo "No DLL found in x64\Release\"
+        dir Release\*.dll 2>nul || echo "No DLL found in Release\"
+      
+    - name: Upload x64 artifact
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: EmEditorAIPlugin-x64
+        path: |
+          x64/Release/EmEditorAIPlugin.dll
+          Release/EmEditorAIPlugin.dll
