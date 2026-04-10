@@ -1,6 +1,8 @@
 // EmEditor AI Plugin - Resource Script
 // Copyright (c) 2025 - AI Assistant Plugin for EmEditor
 
+#pragma code_page(65001)  // UTF-8 encoding for Chinese characters
+
 #include "resource.h"
 #include <windows.h>
 
