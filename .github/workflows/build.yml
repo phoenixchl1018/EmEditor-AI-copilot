@@ -3,6 +3,8 @@ name: Build EmEditor AI Plugin
 on:
   push:
     branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -17,10 +19,80 @@ jobs:
       uses: microsoft/setup-msbuild@v2
       
     - name: Build x64 Release
-      run: msbuild EmEditorAIPlugin.sln /p:Configuration=Release /p:Platform=x64
+      run: msbuild EmEditorAIPlugin.sln /p:Configuration=Release /p:Platform=x64 /verbosity:minimal
       
     - name: Upload x64 artifact
       uses: actions/upload-artifact@v4
       with:
         name: EmEditorAIPlugin-x64
         path: x64/Release/EmEditorAIPlugin.dll
+        
+  build-x86:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+      
+    - name: Build x86 Release
+      run: msbuild EmEditorAIPlugin.sln /p:Configuration=Release /p:Platform=Win32 /verbosity:minimal
+      
+    - name: Upload x86 artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: EmEditorAIPlugin-x86
+        path: Release/EmEditorAIPlugin.dll
+        
+  release:
+    needs: [build-x64, build-x86]
+    runs-on: windows-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Download x64 artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: EmEditorAIPlugin-x64
+        path: ./artifacts/x64
+        
+    - name: Download x86 artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: EmEditorAIPlugin-x86
+        path: ./artifacts/x86
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./artifacts/x64/EmEditorAIPlugin.dll
+          ./artifacts/x86/EmEditorAIPlugin.dll
+        body: |
+          ## EmEditor AI助手插件
+          
+          ### 安装方法
+          1. 关闭 EmEditor
+          2. 根据你的系统选择对应版本：
+             - 64位系统：使用 `EmEditorAIPlugin-x64.dll`，重命名为 `EmEditorAIPlugin.dll`
+             - 32位系统：使用 `EmEditorAIPlugin-x86.dll`，重命名为 `EmEditorAIPlugin.dll`
+          3. 将 DLL 文件复制到 `C:\Program Files\EmEditor\PlugIns\`
+          4. 启动 EmEditor，在 工具 → 插件 中启用
+          
+          ### 配置
+          1. 点击 AI助手 窗口的"设置"按钮
+          2. 选择 AI 平台并填写 API 密钥
+          3. 点击"测试连接"验证
+          
+          ### 支持的AI平台
+          - DeepSeek
+          - 豆包 (火山引擎)
+          - Kimi
+          - MiniMax
+          - 通义千问
+          - OpenAI GPT
+          - Google Gemini
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
