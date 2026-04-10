@@ -1,0 +1,152 @@
+// EmEditor AI Plugin - Resource Script
+// Copyright (c) 2025 - AI Assistant Plugin for EmEditor
+
+#include "resource.h"
+#include <windows.h>
+
+// Version Information
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+FILEFLAGSMASK   VS_FFI_FILEFLAGSMASK
+FILEFLAGS       0
+FILEOS          VOS_NT_WINDOWS32
+FILETYPE        VFT_DLL
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      "EmEditor AI Plugin Developer"
+            VALUE "FileDescription",  "EmEditor AI Assistant Plugin"
+            VALUE "FileVersion",      "1.0.0.0"
+            VALUE "InternalName",     "EmEditorAIPlugin"
+            VALUE "LegalCopyright",   "Copyright (C) 2025"
+            VALUE "OriginalFilename", "EmEditorAIPlugin.dll"
+            VALUE "ProductName",      "EmEditor AI Assistant"
+            VALUE "ProductVersion",   "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+// Icon
+IDI_PLUGIN_ICON ICON "plugin.ico"
+
+// Bitmap
+IDB_PLUGIN_BITMAP BITMAP "plugin.bmp"
+
+// String Table
+STRINGTABLE
+BEGIN
+    IDS_MENU_TEXT       "AI助手(&A)"
+    IDS_STATUS_MESSAGE  "打开AI助手对话框"
+END
+
+// Settings Dialog
+IDD_SETTINGS DIALOGEX 0, 0, 500, 450
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "AI助手设置"
+FONT 9, "Microsoft YaHei", 400, 0, 0x1
+BEGIN
+    // Tab Control
+    CONTROL         "", IDC_TAB_SETTINGS, "SysTabControl32", TCS_MULTILINE | WS_TABSTOP,
+                    7, 7, 486, 380
+    
+    // General Tab
+    GROUPBOX        "常规设置", -1, 15, 25, 470, 100
+    CONTROL         "选中文本时自动显示AI助手", IDC_CHK_AUTO_SHOW, "Button", BS_AUTOCHECKBOX | WS_TABSTOP,
+                    25, 40, 200, 10
+    CONTROL         "记住窗口大小和位置", IDC_CHK_REMEMBER_SIZE, "Button", BS_AUTOCHECKBOX | WS_TABSTOP,
+                    25, 55, 200, 10
+    CONTROL         "窗口置顶", IDC_CHK_TOPMOST, "Button", BS_AUTOCHECKBOX | WS_TABSTOP,
+                    25, 70, 200, 10
+    CONTROL         "保存对话历史", IDC_CHK_SAVE_HISTORY, "Button", BS_AUTOCHECKBOX | WS_TABSTOP,
+                    25, 85, 200, 10
+    LTEXT           "历史记录保留天数:", -1, 250, 40, 80, 8
+    EDITTEXT        IDC_EDIT_HISTORY_DAYS, 335, 38, 40, 12, ES_NUMBER
+    CONTROL         "", IDC_SPIN_HISTORY_DAYS, "msctls_updown32", UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,
+                    375, 38, 10, 12
+    
+    // Font Tab
+    GROUPBOX        "字体设置", -1, 15, 130, 470, 80
+    LTEXT           "字体大小:", -1, 25, 145, 40, 8
+    EDITTEXT        IDC_EDIT_FONT_SIZE, 70, 143, 30, 12, ES_NUMBER
+    CONTROL         "", IDC_SPIN_FONT_SIZE, "msctls_updown32", UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,
+                    100, 143, 10, 12
+    LTEXT           "字体名称:", -1, 130, 145, 40, 8
+    EDITTEXT        IDC_EDIT_FONT_NAME, 175, 143, 120, 12
+    CONTROL         "粗体", IDC_CHK_FONT_BOLD, "Button", BS_AUTOCHECKBOX | WS_TABSTOP,
+                    310, 145, 50, 10
+    LTEXT           "主题:", -1, 25, 165, 30, 8
+    COMBOBOX        IDC_COMBO_THEME, 60, 163, 100, 60, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    
+    // AI Provider Tab
+    GROUPBOX        "AI平台设置", -1, 15, 215, 470, 165
+    LTEXT           "AI平台:", -1, 25, 230, 35, 8
+    COMBOBOX        IDC_COMBO_SETTINGS_PROVIDER, 65, 228, 150, 150, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "API地址:", -1, 25, 250, 35, 8
+    EDITTEXT        IDC_EDIT_API_URL, 65, 248, 410, 12
+    LTEXT           "API密钥:", -1, 25, 270, 35, 8
+    EDITTEXT        IDC_EDIT_API_KEY, 65, 268, 410, 12, ES_PASSWORD
+    LTEXT           "模型名称:", -1, 25, 290, 40, 8
+    EDITTEXT        IDC_EDIT_MODEL, 70, 288, 150, 12
+    PUSHBUTTON      "测试连接", IDC_BTN_TEST_CONNECTION, 25, 310, 60, 14
+    LTEXT           "", IDC_STATIC_TEST_RESULT, 95, 313, 200, 8
+    
+    // AI Parameters Tab
+    GROUPBOX        "AI参数设置", -1, 250, 215, 235, 165
+    LTEXT           "最大Token数:", -1, 260, 230, 55, 8
+    EDITTEXT        IDC_EDIT_MAX_TOKENS, 320, 228, 50, 12, ES_NUMBER
+    CONTROL         "", IDC_SPIN_MAX_TOKENS, "msctls_updown32", UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,
+                    370, 228, 10, 12
+    LTEXT           "Temperature:", -1, 260, 250, 50, 8
+    EDITTEXT        IDC_EDIT_TEMPERATURE, 320, 248, 40, 12
+    LTEXT           "(0.0-2.0, 越低越确定)", -1, 370, 250, 100, 8
+    LTEXT           "默认翻译语言:", -1, 260, 270, 55, 8
+    COMBOBOX        IDC_COMBO_TRANSLATE_LANG, 320, 268, 100, 100, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    
+    // Buttons
+    PUSHBUTTON      "清空历史记录", IDC_BTN_CLEAR_HISTORY, 7, 395, 70, 14
+    DEFPUSHBUTTON   "确定", IDOK, 345, 395, 50, 14
+    PUSHBUTTON      "取消", IDCANCEL, 405, 395, 50, 14
+    PUSHBUTTON      "应用", IDAPPLY, 445, 395, 50, 14
+END
+
+// History Dialog
+IDD_HISTORY DIALOGEX 0, 0, 600, 450
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "对话历史"
+FONT 9, "Microsoft YaHei", 400, 0, 0x1
+BEGIN
+    LTEXT           "历史记录列表:", -1, 7, 7, 60, 8
+    LISTBOX         IDC_LIST_HISTORY, 7, 18, 280, 390, LBS_NOTIFY | LBS_WANTKEYBOARDINPUT | WS_VSCROLL | WS_TABSTOP
+    
+    LTEXT           "详细信息:", -1, 295, 7, 40, 8
+    EDITTEXT        IDC_EDIT_HISTORY_DETAIL, 295, 18, 298, 390, ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | ES_AUTOHSCROLL | WS_VSCROLL | WS_HSCROLL
+    
+    PUSHBUTTON      "使用此消息", IDC_BTN_HISTORY_USE, 7, 415, 60, 14
+    PUSHBUTTON      "删除", IDC_BTN_HISTORY_DELETE, 75, 415, 50, 14
+    PUSHBUTTON      "导出", IDC_BTN_HISTORY_EXPORT, 132, 415, 50, 14
+    DEFPUSHBUTTON   "关闭", IDC_BTN_HISTORY_CLOSE, 490, 415, 50, 14
+END
+
+// About Dialog
+IDD_ABOUT DIALOGEX 0, 0, 280, 150
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于 EmEditor AI助手"
+FONT 9, "Microsoft YaHei", 400, 0, 0x1
+BEGIN
+    ICON            IDI_PLUGIN_ICON, -1, 20, 20, 32, 32
+    LTEXT           "EmEditor AI助手", -1, 60, 20, 100, 10
+    LTEXT           "版本 1.0.0", IDC_STATIC_VERSION, 60, 35, 100, 8
+    LTEXT           "Copyright (C) 2025", IDC_STATIC_COPYRIGHT, 60, 50, 100, 8
+    LTEXT           "一款功能强大的EmEditor AI插件，支持多种AI平台。", -1, 20, 75, 240, 20
+    LTEXT           "支持平台: DeepSeek, 豆包, Kimi, MiniMax, 通义千问, OpenAI, Gemini", -1, 20, 100, 240, 20
+    CONTROL         "<a>访问项目主页</a>", IDC_LINK_HOMEPAGE, "SysLink", WS_TABSTOP, 20, 125, 80, 10
+    DEFPUSHBUTTON   "确定", IDOK, 200, 125, 50, 14
+END

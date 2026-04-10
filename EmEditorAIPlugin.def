@@ -1,0 +1,13 @@
+; EmEditor AI Plugin - Module Definition File
+; Copyright (c) 2025 - AI Assistant Plugin for EmEditor
+
+LIBRARY EmEditorAIPlugin
+
+EXPORTS
+    OnCommand       @1
+    QueryStatus     @2
+    OnEvents        @3
+    GetMenuTextID   @4
+    GetStatusMessageID @5
+    GetBitmapID     @6
+    PlugInProc      @7
