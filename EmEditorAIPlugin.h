@@ -21,7 +21,7 @@
 #include <mutex>
 #include <fstream>
 #include <sstream>
-#include <json/json.h>
+// JSON parsing - using simple string operations instead of external library
 
 // EmEditor Plugin SDK
 #include "plugin.h"
