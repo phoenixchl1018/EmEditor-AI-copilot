@@ -102,7 +102,7 @@ extern "C" {
 #define EE_VIEW_TO_LOGICAL          (WM_USER + 91)
 #define EE_GET_CELL                 (WM_USER + 92)
 #define EE_SET_CELL                 (WM_USER + 93)
-#define EE_GET_COLUMN               (WM_USER + 94)
+// Note: EE_GET_COLUMN is already defined at line 47
 #define EE_SET_COLUMN               (WM_USER + 95)
 #define EE_GET_TITLE                (WM_USER + 96)
 #define EE_SET_TITLE                (WM_USER + 97)

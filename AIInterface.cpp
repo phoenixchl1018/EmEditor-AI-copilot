@@ -2,6 +2,7 @@
 // Copyright (c) 2025 - AI Assistant Plugin for EmEditor
 
 #include "EmEditorAIPlugin.h"
+#include "resource.h"
 #include <wininet.h>
 #include <sstream>
 
