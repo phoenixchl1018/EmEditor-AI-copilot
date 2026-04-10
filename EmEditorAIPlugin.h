@@ -55,7 +55,6 @@
 #define IDC_COMBO_LANGUAGE      1012
 #define IDC_SLIDER_FONT_SIZE    1013
 #define IDC_STATIC_STATUS       1014
-#define IDC_LIST_HISTORY        1015
 #define IDC_TREE_FUNCTIONS      1016
 #define IDC_EDIT_API_KEY        1017
 #define IDC_EDIT_API_URL        1018

@@ -34,7 +34,6 @@ bool g_isCustomBarVisible = false;
 HWND g_hwndSettingsBtn = NULL;
 HWND g_hwndHistoryBtn = NULL;
 HWND g_hwndClearBtn = NULL;
-HWND g_hwndFontSlider = NULL;
 
 static const wchar_t* CUSTOM_BAR_CLASS_NAME = L"EmEditorAICustomBar";
 static const UINT CUSTOM_BAR_ID = 9001;
