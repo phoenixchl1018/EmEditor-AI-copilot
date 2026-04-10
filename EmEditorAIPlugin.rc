@@ -45,22 +45,106 @@ IDB_PLUGIN_BITMAP BITMAP "plugin.bmp"
 // String Table
 STRINGTABLE
 BEGIN
-    IDS_MENU_TEXT       "AI助手(&A)"
-    IDS_STATUS_MESSAGE  "打开AI助手对话框"
-    IDS_BTN_SUMMARIZE   "总结"
-    IDS_BTN_EXPLAIN     "解释"
-    IDS_BTN_TRANSLATE   "翻译"
-    IDS_BTN_CHAT        "对话"
-    IDS_BTN_SETTINGS    "设置"
-    IDS_BTN_HISTORY     "历史"
-    IDS_BTN_CLEAR       "清空"
-    IDS_BTN_SEND        "发送"
-    IDS_STATUS_READY    "就绪"
-    IDS_STATUS_PROCESSING "处理中..."
-    IDS_STATUS_ERROR    "错误"
-    IDS_LBL_FONT        "字体:"
-    IDS_DEFAULT_PROMPT  "请分析以下内容：\n"
-    IDS_AI_ASSISTANT    "EmEditor AI助手"
+    // Main Window
+    IDS_MENU_TEXT           "AI助手(&A)"
+    IDS_STATUS_MESSAGE      "打开AI助手对话框"
+    IDS_BTN_SUMMARIZE       "总结"
+    IDS_BTN_EXPLAIN         "解释"
+    IDS_BTN_TRANSLATE       "翻译"
+    IDS_BTN_CHAT            "对话"
+    IDS_BTN_SETTINGS        "设置"
+    IDS_BTN_HISTORY         "历史"
+    IDS_BTN_CLEAR           "清空"
+    IDS_BTN_SEND            "发送"
+    IDS_STATUS_READY        "就绪"
+    IDS_STATUS_PROCESSING   "处理中..."
+    IDS_STATUS_ERROR        "错误"
+    IDS_LBL_FONT            "字体:"
+    IDS_DEFAULT_PROMPT      "请分析以下内容：\n"
+    IDS_AI_ASSISTANT        "EmEditor AI助手"
+    
+    // Provider Names
+    IDS_PROVIDER_DEEPSEEK   "DeepSeek"
+    IDS_PROVIDER_DOUBAO     "豆包 (火山引擎)"
+    IDS_PROVIDER_KIMI       "Kimi"
+    IDS_PROVIDER_MINIMAX    "MiniMax"
+    IDS_PROVIDER_QIANWEN    "通义千问"
+    IDS_PROVIDER_OPENAI     "OpenAI GPT"
+    IDS_PROVIDER_GEMINI     "Google Gemini"
+    IDS_PROVIDER_CUSTOM     "自定义"
+    
+    // Function Names
+    IDS_FUNC_SUMMARIZE      "总结"
+    IDS_FUNC_EXPLAIN        "解释"
+    IDS_FUNC_TRANSLATE      "翻译"
+    IDS_FUNC_CHAT           "对话"
+    IDS_FUNC_CODEREVIEW     "代码审查"
+    IDS_FUNC_GRAMMAR        "语法检查"
+    IDS_FUNC_REWRITE        "改写"
+    
+    // Language Names
+    IDS_LANG_AUTO           "自动检测"
+    IDS_LANG_ZH_CN          "简体中文"
+    IDS_LANG_ZH_TW          "繁体中文"
+    IDS_LANG_EN             "英语"
+    IDS_LANG_JA             "日语"
+    IDS_LANG_KO             "韩语"
+    IDS_LANG_FR             "法语"
+    IDS_LANG_DE             "德语"
+    IDS_LANG_ES             "西班牙语"
+    IDS_LANG_RU             "俄语"
+    
+    // Settings Dialog
+    IDS_SETTINGS_TITLE      "AI助手设置"
+    IDS_GROUP_GENERAL       "常规设置"
+    IDS_GROUP_FONT          "字体设置"
+    IDS_GROUP_AI_PROVIDER   "AI平台设置"
+    IDS_GROUP_AI_PARAMS     "AI参数设置"
+    IDS_LBL_API_URL         "API地址:"
+    IDS_LBL_API_KEY         "API密钥:"
+    IDS_LBL_MODEL           "模型名称:"
+    IDS_LBL_MAX_TOKENS      "最大Token数:"
+    IDS_LBL_TEMPERATURE     "Temperature:"
+    IDS_LBL_TRANSLATE_LANG  "默认翻译语言:"
+    IDS_LBL_THEME           "主题:"
+    IDS_BTN_TEST_CONN       "测试连接"
+    IDS_BTN_CLEAR_HIST      "清空历史记录"
+    IDS_CHK_AUTO_SHOW       "选中文本时自动显示AI助手"
+    IDS_CHK_REMEMBER_SIZE   "记住窗口大小和位置"
+    IDS_CHK_TOPMOST         "窗口置顶"
+    IDS_CHK_SAVE_HISTORY    "保存对话历史"
+    IDS_CHK_FONT_BOLD       "粗体"
+    
+    // Theme Names
+    IDS_THEME_DEFAULT       "默认"
+    IDS_THEME_DARK          "深色"
+    
+    // Test Connection Results
+    IDS_TEST_CONNECTING     "正在测试连接..."
+    IDS_TEST_SUCCESS        "连接测试成功！"
+    IDS_TEST_FAILED         "连接测试失败，请检查API配置。"
+    
+    // Status Messages
+    IDS_STATUS_REQUESTING   "正在请求"
+    IDS_STATUS_CONNECT_FAIL "错误：无法连接到AI服务，请检查网络连接和API配置。"
+    IDS_STATUS_PARSE_FAIL   "错误：无法解析AI响应。"
+    
+    // MessageBox Titles
+    IDS_MSG_TITLE_INFO      "提示"
+    IDS_MSG_TITLE_ERROR     "错误"
+    IDS_MSG_TITLE_CONFIRM   "确认"
+    
+    // Prompt Messages
+    IDS_PROMPT_SELECT_TEXT  "请先选择要处理的文本。"
+    IDS_PROMPT_ANALYZE      "请分析以下内容：\n\n"
+    IDS_PROMPT_SUMMARIZE    "请对以下内容进行总结：\n\n"
+    IDS_PROMPT_EXPLAIN      "请解释以下内容：\n\n"
+    IDS_PROMPT_TRANSLATE    "请翻译以下内容：\n\n"
+    
+    // Output Labels
+    IDS_LABEL_USER          "[我] "
+    IDS_LABEL_AI            "[AI] "
+    IDS_LABEL_ERROR         "[错误] "
 END
 
 // Settings Dialog

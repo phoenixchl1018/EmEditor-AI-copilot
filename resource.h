@@ -10,7 +10,7 @@
 // Bitmaps
 #define IDB_PLUGIN_BITMAP       201
 
-// Strings
+// Strings - Main Window
 #define IDS_MENU_TEXT           1001
 #define IDS_STATUS_MESSAGE      1002
 #define IDS_BTN_SUMMARIZE       1003
@@ -27,6 +27,89 @@
 #define IDS_LBL_FONT            1014
 #define IDS_DEFAULT_PROMPT      1015
 #define IDS_AI_ASSISTANT        1016
+
+// Provider Names
+#define IDS_PROVIDER_DEEPSEEK   1050
+#define IDS_PROVIDER_DOUBAO     1051
+#define IDS_PROVIDER_KIMI       1052
+#define IDS_PROVIDER_MINIMAX    1053
+#define IDS_PROVIDER_QIANWEN    1054
+#define IDS_PROVIDER_OPENAI     1055
+#define IDS_PROVIDER_GEMINI     1056
+#define IDS_PROVIDER_CUSTOM     1057
+
+// Function Names
+#define IDS_FUNC_SUMMARIZE      1060
+#define IDS_FUNC_EXPLAIN        1061
+#define IDS_FUNC_TRANSLATE      1062
+#define IDS_FUNC_CHAT           1063
+#define IDS_FUNC_CODEREVIEW     1064
+#define IDS_FUNC_GRAMMAR        1065
+#define IDS_FUNC_REWRITE        1066
+
+// Language Names
+#define IDS_LANG_AUTO           1070
+#define IDS_LANG_ZH_CN          1071
+#define IDS_LANG_ZH_TW          1072
+#define IDS_LANG_EN             1073
+#define IDS_LANG_JA             1074
+#define IDS_LANG_KO             1075
+#define IDS_LANG_FR             1076
+#define IDS_LANG_DE             1077
+#define IDS_LANG_ES             1078
+#define IDS_LANG_RU             1079
+
+// Settings Dialog Strings
+#define IDS_SETTINGS_TITLE      1100
+#define IDS_GROUP_GENERAL       1101
+#define IDS_GROUP_FONT          1102
+#define IDS_GROUP_AI_PROVIDER   1103
+#define IDS_GROUP_AI_PARAMS     1104
+#define IDS_LBL_API_URL         1105
+#define IDS_LBL_API_KEY         1106
+#define IDS_LBL_MODEL           1107
+#define IDS_LBL_MAX_TOKENS      1108
+#define IDS_LBL_TEMPERATURE     1109
+#define IDS_LBL_TRANSLATE_LANG  1110
+#define IDS_LBL_THEME           1111
+#define IDS_BTN_TEST_CONN       1112
+#define IDS_BTN_CLEAR_HIST      1113
+#define IDS_CHK_AUTO_SHOW       1114
+#define IDS_CHK_REMEMBER_SIZE   1115
+#define IDS_CHK_TOPMOST         1116
+#define IDS_CHK_SAVE_HISTORY    1117
+#define IDS_CHK_FONT_BOLD       1118
+
+// Theme Names
+#define IDS_THEME_DEFAULT       1120
+#define IDS_THEME_DARK          1121
+
+// Test Connection Results
+#define IDS_TEST_CONNECTING     1130
+#define IDS_TEST_SUCCESS        1131
+#define IDS_TEST_FAILED         1132
+
+// Status Messages
+#define IDS_STATUS_REQUESTING   1140
+#define IDS_STATUS_CONNECT_FAIL 1141
+#define IDS_STATUS_PARSE_FAIL   1142
+
+// MessageBox Titles
+#define IDS_MSG_TITLE_INFO      1150
+#define IDS_MSG_TITLE_ERROR     1151
+#define IDS_MSG_TITLE_CONFIRM   1152
+
+// Prompt Messages
+#define IDS_PROMPT_SELECT_TEXT  1160
+#define IDS_PROMPT_ANALYZE      1161
+#define IDS_PROMPT_SUMMARIZE    1162
+#define IDS_PROMPT_EXPLAIN      1163
+#define IDS_PROMPT_TRANSLATE    1164
+
+// Output Labels
+#define IDS_LABEL_USER          1170
+#define IDS_LABEL_AI            1171
+#define IDS_LABEL_ERROR         1172
 
 // Dialogs
 #define IDD_SETTINGS            2001

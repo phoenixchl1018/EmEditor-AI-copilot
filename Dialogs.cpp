@@ -71,8 +71,8 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         
         // Theme combo
         HWND hThemeCombo = GetDlgItem(hwndDlg, IDC_COMBO_THEME);
-        SendMessage(hThemeCombo, CB_ADDSTRING, 0, (LPARAM)L"默认");
-        SendMessage(hThemeCombo, CB_ADDSTRING, 0, (LPARAM)L"深色");
+        SendMessage(hThemeCombo, CB_ADDSTRING, 0, (LPARAM)LoadStringRes(IDS_THEME_DEFAULT).c_str());
+        SendMessage(hThemeCombo, CB_ADDSTRING, 0, (LPARAM)LoadStringRes(IDS_THEME_DARK).c_str());
         SendMessage(hThemeCombo, CB_SETCURSEL, tempConfig.darkMode ? 1 : 0, 0);
         
         return TRUE;
@@ -123,7 +123,7 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                 config.model = buffer;
                 
                 // Test connection
-                SetDlgItemText(hwndDlg, IDC_STATIC_TEST_RESULT, L"正在测试连接...");
+                SetDlgItemText(hwndDlg, IDC_STATIC_TEST_RESULT, LoadStringRes(IDS_TEST_CONNECTING).c_str());
                 
                 std::thread([hwndDlg, provider, config]() {
                     std::wstring result = CallAIAPI(L"Hello, this is a test message.", L"");
@@ -136,10 +136,10 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
         }
         
         case IDC_BTN_CLEAR_HISTORY:
-            if (MessageBox(hwndDlg, L"确定要清空所有历史记录吗？", L"确认", 
+            if (MessageBox(hwndDlg, L"Clear all history records?", L"Confirm", 
                 MB_YESNO | MB_ICONQUESTION) == IDYES) {
                 ClearHistory();
-                MessageBox(hwndDlg, L"历史记录已清空。", L"提示", MB_OK | MB_ICONINFORMATION);
+                MessageBox(hwndDlg, L"History cleared.", L"Info", MB_OK | MB_ICONINFORMATION);
             }
             return TRUE;
             
@@ -221,9 +221,9 @@ INT_PTR CALLBACK SettingsDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
     case WM_USER + 200: {
         // Test connection result
         if (wParam) {
-            SetDlgItemText(hwndDlg, IDC_STATIC_TEST_RESULT, L"连接测试成功！");
+            SetDlgItemText(hwndDlg, IDC_STATIC_TEST_RESULT, LoadStringRes(IDS_TEST_SUCCESS).c_str());
         } else {
-            SetDlgItemText(hwndDlg, IDC_STATIC_TEST_RESULT, L"连接测试失败，请检查API配置。");
+            SetDlgItemText(hwndDlg, IDC_STATIC_TEST_RESULT, LoadStringRes(IDS_TEST_FAILED).c_str());
         }
         return TRUE;
     }
@@ -288,15 +288,15 @@ INT_PTR CALLBACK HistoryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                     if (sel < (int)g_chatHistory.size()) {
                         const ChatMessage& msg = g_chatHistory[sel];
                         std::wstring detail;
-                        detail += L"时间: ";
+                        detail += L"Time: ";
                         detail += FormatTimestamp(msg.timestamp);
-                        detail += L"\r\n角色: ";
-                        detail += (msg.role == L"user" ? L"用户" : L"AI");
-                        detail += L"\r\nAI平台: ";
+                        detail += L"\r\nRole: ";
+                        detail += (msg.role == L"user" ? L"User" : L"AI");
+                        detail += L"\r\nProvider: ";
                         detail += msg.provider;
-                        detail += L"\r\n模型: ";
+                        detail += L"\r\nModel: ";
                         detail += msg.model;
-                        detail += L"\r\n\r\n内容:\r\n";
+                        detail += L"\r\n\r\nContent:\r\n";
                         detail += msg.content;
                         
                         SetDlgItemText(hwndDlg, IDC_EDIT_HISTORY_DETAIL, detail.c_str());
@@ -329,7 +329,7 @@ INT_PTR CALLBACK HistoryDlgProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                 HWND hList = GetDlgItem(hwndDlg, IDC_LIST_HISTORY);
                 int sel = (int)SendMessage(hList, LB_GETCURSEL, 0, 0);
                 if (sel >= 0) {
-                    if (MessageBox(hwndDlg, L"确定要删除这条记录吗？", L"确认",
+                    if (MessageBox(hwndDlg, L"Delete this record?", L"Confirm",
                         MB_YESNO | MB_ICONQUESTION) == IDYES) {
                         std::lock_guard<std::mutex> lock(g_historyMutex);
                         if (sel < (int)g_chatHistory.size()) {

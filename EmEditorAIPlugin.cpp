@@ -30,6 +30,12 @@ std::mutex g_apiMutex;
 bool g_isProcessing = false;
 bool g_isCustomBarVisible = false;
 
+// Additional control handles
+HWND g_hwndSettingsBtn = NULL;
+HWND g_hwndHistoryBtn = NULL;
+HWND g_hwndClearBtn = NULL;
+HWND g_hwndFontSlider = NULL;
+
 static const wchar_t* CUSTOM_BAR_CLASS_NAME = L"EmEditorAICustomBar";
 static const UINT CUSTOM_BAR_ID = 9001;
 
@@ -594,22 +600,22 @@ void CreateCustomBarControls(HWND hwndParent) {
     SendMessage(g_hwndFontSlider, TBM_SETPOS, TRUE, g_config.outputFontSize);
     SendMessage(g_hwndFontSlider, TBM_SETTICFREQ, 2, 0);
     
-    // Bottom buttons
-    CreateWindow(
+    // Bottom buttons - save handles for layout
+    g_hwndSettingsBtn = CreateWindow(
         L"BUTTON", LoadStringRes(IDS_BTN_SETTINGS).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         160, 425, 50, 25,
         hwndParent, (HMENU)IDC_BTN_SETTINGS, hInst, NULL
     );
     
-    CreateWindow(
+    g_hwndHistoryBtn = CreateWindow(
         L"BUTTON", LoadStringRes(IDS_BTN_HISTORY).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         215, 425, 50, 25,
         hwndParent, (HMENU)IDC_BTN_HISTORY, hInst, NULL
     );
     
-    CreateWindow(
+    g_hwndClearBtn = CreateWindow(
         L"BUTTON", LoadStringRes(IDS_BTN_CLEAR).c_str(),
         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
         270, 425, 50, 25,
@@ -640,6 +646,8 @@ void LayoutControls(int width, int height) {
     int inputHeight = 80;
     int statusHeight = 20;
     int bottomPanelHeight = 50;
+    int btnHeight = 25;
+    int btnWidth = 50;
     
     // Function panel
     SetWindowPos(g_hwndFunctionPanel, NULL, 
@@ -657,14 +665,51 @@ void LayoutControls(int width, int height) {
     // Input edit
     SetWindowPos(g_hwndInput, NULL,
         margin, margin + panelHeight + outputHeight + 10,
-        width - margin * 2 - 75, inputHeight,
+        width - margin * 2 - 80, inputHeight,
         SWP_NOZORDER);
     
     // Send button
     SetWindowPos(g_hwndSendButton, NULL,
-        width - margin - 70, margin + panelHeight + outputHeight + 10,
-        70, inputHeight,
+        width - margin - 75, margin + panelHeight + outputHeight + 10,
+        75, inputHeight,
         SWP_NOZORDER);
+    
+    // Font label and slider (bottom area)
+    int bottomY = margin + panelHeight + outputHeight + 10 + inputHeight + 5;
+    
+    // Font slider - positioned at left
+    SetWindowPos(g_hwndFontSlider, NULL,
+        margin + 40, bottomY + 5,
+        100, 20,
+        SWP_NOZORDER);
+    
+    // Bottom buttons - positioned at right
+    int btnY = bottomY;
+    int rightX = width - margin;
+    
+    // Clear button (rightmost)
+    if (g_hwndClearBtn) {
+        SetWindowPos(g_hwndClearBtn, NULL,
+            rightX - btnWidth, btnY,
+            btnWidth, btnHeight,
+            SWP_NOZORDER);
+    }
+    
+    // History button
+    if (g_hwndHistoryBtn) {
+        SetWindowPos(g_hwndHistoryBtn, NULL,
+            rightX - btnWidth * 2 - 5, btnY,
+            btnWidth, btnHeight,
+            SWP_NOZORDER);
+    }
+    
+    // Settings button
+    if (g_hwndSettingsBtn) {
+        SetWindowPos(g_hwndSettingsBtn, NULL,
+            rightX - btnWidth * 3 - 10, btnY,
+            btnWidth, btnHeight,
+            SWP_NOZORDER);
+    }
     
     // Status bar
     SetWindowPos(g_hwndStatus, NULL,
@@ -775,7 +820,8 @@ void AppendToOutput(const std::wstring& text, bool isUser) {
     SendMessage(g_hwndOutput, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
     
     // Add prefix
-    std::wstring prefix = isUser ? L"\n[我] " : L"\n[AI] ";
+    std::wstring prefix = L"\n";
+    prefix += isUser ? LoadStringRes(IDS_LABEL_USER) : LoadStringRes(IDS_LABEL_AI);
     SendMessage(g_hwndOutput, EM_REPLACESEL, 0, (LPARAM)prefix.c_str());
     
     // Add message
@@ -798,14 +844,14 @@ void ClearOutput() {
 // Get Provider Name
 std::wstring GetProviderName(AIProvider provider) {
     switch (provider) {
-    case AIProvider::DeepSeek: return L"DeepSeek";
-    case AIProvider::Doubao: return L"豆包 (火山引擎)";
-    case AIProvider::Kimi: return L"Kimi";
-    case AIProvider::MiniMax: return L"MiniMax";
-    case AIProvider::Qianwen: return L"通义千问";
-    case AIProvider::OpenAI: return L"OpenAI GPT";
-    case AIProvider::Gemini: return L"Google Gemini";
-    case AIProvider::Custom: return L"自定义";
+    case AIProvider::DeepSeek: return LoadStringRes(IDS_PROVIDER_DEEPSEEK);
+    case AIProvider::Doubao: return LoadStringRes(IDS_PROVIDER_DOUBAO);
+    case AIProvider::Kimi: return LoadStringRes(IDS_PROVIDER_KIMI);
+    case AIProvider::MiniMax: return LoadStringRes(IDS_PROVIDER_MINIMAX);
+    case AIProvider::Qianwen: return LoadStringRes(IDS_PROVIDER_QIANWEN);
+    case AIProvider::OpenAI: return LoadStringRes(IDS_PROVIDER_OPENAI);
+    case AIProvider::Gemini: return LoadStringRes(IDS_PROVIDER_GEMINI);
+    case AIProvider::Custom: return LoadStringRes(IDS_PROVIDER_CUSTOM);
     default: return L"Unknown";
     }
 }
@@ -813,31 +859,31 @@ std::wstring GetProviderName(AIProvider provider) {
 // Get Function Name
 std::wstring GetFunctionName(AIFunction func) {
     switch (func) {
-    case AIFunction::Summarize: return L"总结";
-    case AIFunction::Explain: return L"解释";
-    case AIFunction::Translate: return L"翻译";
-    case AIFunction::Chat: return L"对话";
-    case AIFunction::CodeReview: return L"代码审查";
-    case AIFunction::GrammarCheck: return L"语法检查";
-    case AIFunction::Rewrite: return L"改写";
-    default: return L"自定义";
+    case AIFunction::Summarize: return LoadStringRes(IDS_FUNC_SUMMARIZE);
+    case AIFunction::Explain: return LoadStringRes(IDS_FUNC_EXPLAIN);
+    case AIFunction::Translate: return LoadStringRes(IDS_FUNC_TRANSLATE);
+    case AIFunction::Chat: return LoadStringRes(IDS_FUNC_CHAT);
+    case AIFunction::CodeReview: return LoadStringRes(IDS_FUNC_CODEREVIEW);
+    case AIFunction::GrammarCheck: return LoadStringRes(IDS_FUNC_GRAMMAR);
+    case AIFunction::Rewrite: return LoadStringRes(IDS_FUNC_REWRITE);
+    default: return LoadStringRes(IDS_FUNC_CHAT);
     }
 }
 
 // Get Language Name
 std::wstring GetLanguageName(TranslateLang lang) {
     switch (lang) {
-    case TranslateLang::Auto: return L"自动检测";
-    case TranslateLang::ChineseSimplified: return L"简体中文";
-    case TranslateLang::ChineseTraditional: return L"繁体中文";
-    case TranslateLang::English: return L"英语";
-    case TranslateLang::Japanese: return L"日语";
-    case TranslateLang::Korean: return L"韩语";
-    case TranslateLang::French: return L"法语";
-    case TranslateLang::German: return L"德语";
-    case TranslateLang::Spanish: return L"西班牙语";
-    case TranslateLang::Russian: return L"俄语";
-    default: return L"未知";
+    case TranslateLang::Auto: return LoadStringRes(IDS_LANG_AUTO);
+    case TranslateLang::ChineseSimplified: return LoadStringRes(IDS_LANG_ZH_CN);
+    case TranslateLang::ChineseTraditional: return LoadStringRes(IDS_LANG_ZH_TW);
+    case TranslateLang::English: return LoadStringRes(IDS_LANG_EN);
+    case TranslateLang::Japanese: return LoadStringRes(IDS_LANG_JA);
+    case TranslateLang::Korean: return LoadStringRes(IDS_LANG_KO);
+    case TranslateLang::French: return LoadStringRes(IDS_LANG_FR);
+    case TranslateLang::German: return LoadStringRes(IDS_LANG_DE);
+    case TranslateLang::Spanish: return LoadStringRes(IDS_LANG_ES);
+    case TranslateLang::Russian: return LoadStringRes(IDS_LANG_RU);
+    default: return LoadStringRes(IDS_LANG_AUTO);
     }
 }
 
@@ -845,19 +891,19 @@ std::wstring GetLanguageName(TranslateLang lang) {
 std::wstring GetSystemPrompt(AIFunction func) {
     switch (func) {
     case AIFunction::Summarize:
-        return L"你是一个专业的文本总结助手。请对用户提供的内容进行简洁准确的总结，提取关键信息。";
+        return L"You are a professional text summarization assistant. Please provide concise and accurate summaries of user content, extracting key information.";
     case AIFunction::Explain:
-        return L"你是一个知识渊博的解释者。请用通俗易懂的语言解释用户提供的概念或内容，必要时可以举例说明。";
+        return L"You are a knowledgeable explainer. Please explain concepts or content provided by users in easy-to-understand language, with examples when necessary.";
     case AIFunction::Translate:
-        return L"你是一个专业的翻译助手。请准确翻译用户提供的内容，保持原文的语气和风格。";
+        return L"You are a professional translation assistant. Please accurately translate user-provided content while maintaining the original tone and style.";
     case AIFunction::CodeReview:
-        return L"你是一个经验丰富的代码审查专家。请审查用户提供的代码，指出潜在问题、改进建议和最佳实践。";
+        return L"You are an experienced code review expert. Please review user-provided code, pointing out potential issues, improvement suggestions, and best practices.";
     case AIFunction::GrammarCheck:
-        return L"你是一个语法检查专家。请检查用户提供的文本中的语法错误，并给出修正建议。";
+        return L"You are a grammar checking expert. Please check user-provided text for grammatical errors and provide correction suggestions.";
     case AIFunction::Rewrite:
-        return L"你是一个写作专家。请改写用户提供的文本，使其更加流畅、清晰和专业。";
+        return L"You are a writing expert. Please rewrite user-provided text to make it more fluent, clear, and professional.";
     default:
-        return L"你是一个有帮助的AI助手。请根据用户的问题提供准确、有用的回答。";
+        return L"You are a helpful AI assistant. Please provide accurate and useful answers based on user questions.";
     }
 }
 

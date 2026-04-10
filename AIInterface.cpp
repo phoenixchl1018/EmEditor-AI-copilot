@@ -59,8 +59,9 @@ void SendChatMessage(const std::wstring& message) {
             wcscpy_s(responseCopy, response.length() + 1, response.c_str());
             PostMessage(g_hwndCustomBar, WM_AI_RESPONSE, 0, (LPARAM)responseCopy);
         } else {
-            wchar_t* errorCopy = new wchar_t[100];
-            wcscpy_s(errorCopy, 100, L"无法获取响应，请检查API配置。");
+            std::wstring errMsg = LoadStringRes(IDS_STATUS_CONNECT_FAIL);
+            wchar_t* errorCopy = new wchar_t[errMsg.length() + 1];
+            wcscpy_s(errorCopy, errMsg.length() + 1, errMsg.c_str());
             PostMessage(g_hwndCustomBar, WM_AI_ERROR, 0, (LPARAM)errorCopy);
         }
     }).detach();
@@ -70,7 +71,7 @@ void SendChatMessage(const std::wstring& message) {
 void SummarizeText(const std::wstring& text) {
     if (text.empty()) return;
     
-    std::wstring prompt = L"请对以下内容进行总结：\n\n" + text;
+    std::wstring prompt = LoadStringRes(IDS_PROMPT_SUMMARIZE) + text;
     SendChatMessage(prompt);
 }
 
@@ -78,7 +79,7 @@ void SummarizeText(const std::wstring& text) {
 void ExplainText(const std::wstring& text) {
     if (text.empty()) return;
     
-    std::wstring prompt = L"请解释以下内容：\n\n" + text;
+    std::wstring prompt = LoadStringRes(IDS_PROMPT_EXPLAIN) + text;
     SendChatMessage(prompt);
 }
 
@@ -90,9 +91,9 @@ void TranslateText(const std::wstring& text, TranslateLang targetLang) {
     std::wstring prompt;
     
     if (targetLang == TranslateLang::Auto) {
-        prompt = L"请翻译以下内容（自动检测源语言）：\n\n" + text;
+        prompt = LoadStringRes(IDS_PROMPT_TRANSLATE) + text;
     } else {
-        prompt = L"请将以下内容翻译成" + targetLangName + L"：\n\n" + text;
+        prompt = L"Please translate the following content into " + targetLangName + L":\n\n" + text;
     }
     
     SendChatMessage(prompt);
@@ -118,7 +119,7 @@ void GrammarCheck(const std::wstring& text) {
 void RewriteText(const std::wstring& text) {
     if (text.empty()) return;
     
-    std::wstring prompt = L"请改写以下内容，使其更加流畅和专业：\n\n" + text;
+    std::wstring prompt = L"Please rewrite the following content to make it more fluent and professional:\n\n" + text;
     SendChatMessage(prompt);
 }
 
@@ -130,7 +131,7 @@ std::wstring CallAIAPI(const std::wstring& prompt, const std::wstring& systemPro
     AIProviderConfig& config = g_config.providers[provider];
     
     if (config.apiUrl.empty() || config.apiKey.empty()) {
-        return L"错误：API URL 或 API Key 未配置。请在设置中配置API信息。";
+        return L"Error: API URL or API Key not configured. Please configure in Settings.";
     }
     
     // Build request body
@@ -167,7 +168,7 @@ std::wstring CallAIAPI(const std::wstring& prompt, const std::wstring& systemPro
     std::string response = HttpPostWithWinInet(url, requestBody, headers, config.timeoutMs);
     
     if (response.empty()) {
-        return L"错误：无法连接到AI服务，请检查网络连接和API配置。";
+        return LoadStringRes(IDS_STATUS_CONNECT_FAIL);
     }
     
     // Parse response
@@ -175,7 +176,7 @@ std::wstring CallAIAPI(const std::wstring& prompt, const std::wstring& systemPro
     if (ParseAIResponse(provider, response, result)) {
         return result;
     } else {
-        return L"错误：无法解析AI响应。";
+        return LoadStringRes(IDS_STATUS_PARSE_FAIL);
     }
 }
 
